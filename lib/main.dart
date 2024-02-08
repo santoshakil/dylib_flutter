@@ -12,9 +12,13 @@ void main() {
 }
 
 void dylibTest() {
-  final dylib = DynamicLibrary.open('libfa2lib.dylib');
-  final add = dylib.lookupFunction<AddFFI, Add>('add');
-  debugPrint(add(1, 2).toString());
+  try {
+    final dylib = DynamicLibrary.open('libfa2lib.dylib');
+    final add = dylib.lookupFunction<AddFFI, Add>('add');
+    debugPrint(add(1, 2).toString());
+  } catch (e) {
+    debugPrint('Error: $e');
+  }
 }
 
 class MainApp extends StatelessWidget {
