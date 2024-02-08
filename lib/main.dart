@@ -13,8 +13,12 @@ void main() {
 
 void dylibTest() {
   try {
+    final start = DateTime.now().microsecondsSinceEpoch;
     final dylib = DynamicLibrary.open('libfa2lib.dylib');
+    debugPrint('Open dylib: ${DateTime.now().microsecondsSinceEpoch - start} microseconds');
+    final start2 = DateTime.now().microsecondsSinceEpoch;
     final add = dylib.lookupFunction<AddFFI, Add>('add');
+    debugPrint('Lookup function: ${DateTime.now().microsecondsSinceEpoch - start2} microseconds');
     debugPrint(add(1, 2).toString());
   } catch (e) {
     debugPrint('Error: $e');
