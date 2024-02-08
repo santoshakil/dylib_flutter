@@ -14,7 +14,8 @@ void main() {
 void dylibTest() {
   try {
     final start = DateTime.now().microsecondsSinceEpoch;
-    final dylib = DynamicLibrary.open('libfa2lib.dylib');
+    final dylib = getDyLib();
+    if (dylib == null) return;
     debugPrint('Open dylib: ${DateTime.now().microsecondsSinceEpoch - start} µs');
     final start2 = DateTime.now().microsecondsSinceEpoch;
     final add = dylib.lookupFunction<AddFFI, Add>('add');
@@ -22,6 +23,19 @@ void dylibTest() {
     debugPrint(add(1, 2).toString());
   } catch (e) {
     debugPrint('Error: $e');
+  }
+}
+
+DynamicLibrary? getDyLib() {
+  try {
+    return DynamicLibrary.open('libfa2lib.dylib');
+  } catch (_) {
+    try {
+      return DynamicLibrary.open('libfa2simlib.dylib');
+    } catch (e) {
+      debugPrint('Error opening dylib: $e');
+      return null;
+    }
   }
 }
 
